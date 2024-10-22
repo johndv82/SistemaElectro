@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entorno virtual
+venv/
+env/
+
+# Archivos de configuración específicos del entorno
+.env
+.DS_Store
+
+# Migraciones
+db.sqlite3
+
+# Archivos estáticos y de media generados
+staticfiles/
+media/
+
+# IDEs y editores
+.vscode/
+.idea/
