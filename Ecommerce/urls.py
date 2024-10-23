@@ -4,5 +4,5 @@ from . import views
 app_name = 'Ecommerce'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.cargar_categorias, name='index'),
 ]
