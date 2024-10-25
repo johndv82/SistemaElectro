@@ -1,0 +1,32 @@
+{% extends 'layouts/_layout_login.html' %}
+
+{% block title %}Registro de Cuenta{% endblock %}
+
+{% block content %}
+<div class="section auth-section">
+    <div class="container">
+        <div class="auth-box">
+            <h2>Crea una nueva Cuenta</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" class="input" placeholder="Nombre Completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="input" placeholder="Contraseña" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="input" placeholder="Confirma tu Contraseña" required>
+                </div>
+                <button type="submit" class="primary-btn">Registrar</button>
+            </form>
+            <!-- Enlace a la página de Login -->
+            <div class="register-link">
+                <span>¿Ya tienes una cuenta? <a href="{% url 'Ecommerce:login'%}">Inicie sesión aquí</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
