@@ -130,6 +130,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -140,4 +145,7 @@ DJOSER = {
     "USER_ID_FIELD": "username"
 }
 
+<<<<<<< HEAD
 ECOMMERCEAPI_URL = "http://localhost:8000"
+=======
+>>>>>>> 34ca56b24d4e2443f61885c32901dad7cedad705
