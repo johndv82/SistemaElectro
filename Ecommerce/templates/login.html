@@ -3,16 +3,28 @@
 {% block title %}Inicio de Sesión{% endblock %}
 
 {% block content %}
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <div class="section auth-section">
     <div class="container">
         <div class="auth-box">
             <h2>Inicia Sesión con tu Cuenta</h2>
-            <form>
+            <form method="post" action="{% url 'Ecommerce:login' %}">
+                {% csrf_token %}
                 <div class="form-group">
-                    <input type="email" class="input" placeholder="Ingresa tu Email">
+                    <input type="email" name="email" class="input" placeholder="Ingresa tu Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="input" placeholder="Ingresa tu Contraseña">
+                    <input type="password" name="password" class="input" placeholder="Ingresa tu Contraseña" required>
                 </div>
                 <button type="submit" class="primary-btn">Iniciar Sesión</button>
             </form>
