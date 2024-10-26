@@ -21,7 +21,7 @@ def login(request):
         if not user:
             messages.error(request, 'Credenciales incorrectas')
         else:
-            # Realizar solicitud POST al endpoint de Djoser para obtener el token
+            # Realizar solicitud POST para obtener el token
             response_token = requests.post(
                 f"{settings.ECOMMERCEAPI_URL}/auth/token/login/",
                 json={'username': user.username, 'password': password}

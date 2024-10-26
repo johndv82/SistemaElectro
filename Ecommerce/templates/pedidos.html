@@ -1,0 +1,51 @@
+{% extends "layouts/_layout.html" %}
+{% load static %}
+{% block content %}
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+            <h1>Mis Pedidos</h1>
+    
+            {% if pedidos %}
+                <div class="pedidos-container">
+                    {% for pedido in pedidos %}
+                        <div class="pedido">
+                            <h2>Pedido #{{ pedido.id }}</h2>
+                            <p>Fecha: {{ pedido.creado_en|date:"d/m/Y H:i" }}</p>
+                            <p>Estado: {{ pedido.estado }}</p>
+                            <p>Total: ${{ pedido.total }}</p>
+                            
+                            <h3>Productos:</h3>
+                            <ul>
+                                {% for item in pedido.items.all %}
+                                    <li>{{ item.cantidad }} x {{ item.producto.nombre }} - ${{ item.precio }} (Subtotal: ${{ item.obtener_precio_total }})</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No tienes pedidos aún.</p>
+            {% endif %}
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+{% endblock %}

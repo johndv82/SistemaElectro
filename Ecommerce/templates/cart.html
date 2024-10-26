@@ -1,6 +1,13 @@
 {% extends 'layouts/_layout.html' %}
 {% load static %}
 {% block content %}
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   <div class="section">
     <div class="container">
@@ -9,74 +16,148 @@
         <div class="col-md-8">
           <div class="cart-list">
             {% for item in items %}
-            <div class="product-widget">
-              <div class="row align-items-center">
-                <div class="col-md-2">
-                  <div class="product-img">
-                    <img src="./img/product01.png" alt="" />
+              <div class="product-widget">
+                <div class="row align-items-center">
+                  <div class="col-md-2">
+                    <div class="product-img">
+                      <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" />
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="product-body">
-                    <h3 class="product-name"><a href="#">Product Name</a></h3>
-                    <h4 class="product-price">$980.00</h4>
+                  <div class="col-md-4">
+                    <div class="product-body">
+                      <h3 class="product-name"><a href="#">{{ item.producto.nombre }}</a></h3>
+                      <h4 class="product-price precio_unit">{{ item.producto.precio }}</h4>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="input-number">
-                    <button class="qty-down">-</button>
-                    <input type="number" value="1" min="1" />
-                    <button class="qty-up">+</button>
+                  <div class="col-md-3">
+                    <div class="input-number">
+                      <button class="btnmenos qty-down">-</button>
+                      <input class="txtcantidad" type="number" value="1" min="1" />
+                      <button class="btnmas qty-up">+</button>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-2">
-                  <h4 class="product-subtotal">$980.00</h4>
-                </div>
-                <div class="col-md-1 text-right">
-                  <button class="delete"><i class="fa fa-close"></i></button>
+                  <div class="col-md-2">
+                    <h4 class="product-subtotal total">0.00</h4>
+                  </div>
+                  <form action="{% url 'Ecommerce:eliminarcarrito' item.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-md-1 text-right">
+                      <button class="delete"><i class="fa fa-close"></i></button>
+                    </div>
+                  </form>
                 </div>
               </div>
-            </div>
             {% empty %}
               <p>No hay productos agregados en el carrito.</p>
             {% endfor %}
-
-
           </div>
         </div>
 
         <!-- Cart Summary -->
         <div class="col-md-4">
           <div class="cart-summary">
-            <h3 class="cart-summary-title">Cart Summary</h3>
-
-            <div class="order-col">
-              <span>Subtotal</span>
-              <strong>$2940.00</strong>
+            <h3>Resumen del Carrito</h3>
+            <div class="subtotal order-col">
+              <span>Subtotal:</span>
+              <strong>$0.00</strong>
+            </div>
+            <div class="shipping order-col">
+              <span>Envío:</span>
+              <strong>$0.00</strong>
+            </div>
+            <div class="discount order-col">
+              <span>Descuento:</span>
+              <strong>$0.00</strong> <!-- Ajusta si el descuento es dinámico -->
+            </div>
+            <div class="order-total order-col">
+              <span>Total:</span>
+              <strong>$0.00</strong>
             </div>
 
-            <div class="order-col">
-              <span>Shipping</span>
-              <strong>Free</strong>
-            </div>
-
-            <div class="order-col">
-              <span>Discount</span>
-              <strong>-$100.00</strong>
-            </div>
-
-            <div class="order-total">
-              <span>Total</span>
-              <strong>$2840.00</strong>
-            </div>
-
-            <button class="primary-btn btn-block cart-checkout-btn">Proceder con la venta</button>
-
-            <a href="{% url 'Ecommerce:productos' 0%}" class="cart-continue-shopping">Seguir Comprando</a>
+            <form action="{% url 'Ecommerce:procesarpedido' %}" method="post">
+              {% csrf_token %}
+              <button class="primary-btn btn-block cart-checkout-btn">Proceder con la venta</button>
+            </form>
+            <a href="{% url 'Ecommerce:productos' 0 %}" class="cart-continue-shopping">Seguir Comprando</a>
           </div>
         </div>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const productWidgets = document.querySelectorAll('.product-widget');
   
+      let subtotal = 0;
+      const discount = -100.00;
+      const shipping = 0;
+  
+      // Función para actualizar el total en el resumen del carrito
+      function actualizarResumen() {
+          const total = subtotal + shipping + discount;
+          document.querySelector('.order-total strong').textContent = `$${total.toFixed(2)}`;
+          document.querySelector('.subtotal strong').textContent = `$${subtotal.toFixed(2)}`; // Actualiza el subtotal
+      }
+  
+      // Itera sobre cada widget
+      productWidgets.forEach((widget) => {
+          const btnmenos = widget.querySelector('.qty-down');
+          const btnmas = widget.querySelector('.qty-up');
+          const totalElem = widget.querySelector('.product-subtotal');
+          const precio_unit = widget.querySelector('.product-price');
+          const cantidadElem = widget.querySelector('.input-number input');
+  
+          // Verifica que todos los elementos se hayan encontrado
+          if (!cantidadElem || !totalElem || !precio_unit || !btnmas || !btnmenos) {
+              console.error("Error: Elementos no encontrados.");
+              return;
+          }
+  
+          // Obtiene y convierte el precio unitario a un número (limpia cualquier símbolo o espacio)
+          let precioUnitario = parseFloat(precio_unit.textContent.replace(/[^\d.-]/g, ''));
+          if (isNaN(precioUnitario)) {
+              console.error("Error: El precio unitario no se pudo convertir correctamente.");
+              precioUnitario = 0; // En caso de que falle, asigna 0 como precio por seguridad
+          }
+  
+          // Inicializa la cantidad y calcula el total inicial del producto
+          let cantidad = parseInt(cantidadElem.value) || 1;
+          let totalValue = cantidad * precioUnitario;
+          totalElem.textContent = totalValue.toFixed(2); // Muestra el total inicial en el widget
+  
+          // Agrega el valor de este producto al subtotal inicial
+          subtotal += totalValue;
+          actualizarResumen();
+  
+          function actualizarTotal() {
+              totalValue = cantidad * precioUnitario;
+              totalElem.textContent = totalValue.toFixed(2);
+              actualizarResumen();
+          }
+  
+          // Evento para el botón menos
+          btnmenos.addEventListener('click', function() {
+              if (cantidad > 1) {
+                  subtotal -= precioUnitario;
+                  cantidad--;
+                  cantidadElem.value = cantidad;
+                  actualizarTotal();
+              } else {
+                  console.log("La cantidad no puede ser menor que 1");
+              }
+          });
+  
+          // Evento para el botón más
+          btnmas.addEventListener('click', function() {
+              cantidad++;
+              cantidadElem.value = cantidad;
+              subtotal += precioUnitario;
+              actualizarTotal();
+          });
+      });
+  });
+  </script>
 {% endblock %}

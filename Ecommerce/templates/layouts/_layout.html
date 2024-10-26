@@ -41,6 +41,7 @@
 					<ul class="header-links pull-right">
 						<li><a href="{% url 'Ecommerce:logout' %}"><i class="fa fa-sign-out"></i> Salir</a></li>
 						<li><a href="#"><i class="fa fa-user-o"></i> Mi cuenta</a></li>
+						<li><a href="{% url 'Ecommerce:ver_pedidos' %}"> Pedidos</a></li>
 					</ul>
 				</div>
 			</div>
@@ -55,7 +56,7 @@
 						<!-- LOGO -->
 						<div class="col-md-3">
 							<div class="header-logo">
-								<a href="#" class="logo">
+								<a href="{% url 'Ecommerce:productos' 0%}" class="logo">
 									<img src="{% static 'img/logo.png' %}" alt="">
 								</a>
 							</div>
@@ -219,6 +220,9 @@
 				window.location.href = url;
 			}
 		</script>
+
+		{% block extra_js %}
+		{% endblock %}
 
 	</body>
 </html>

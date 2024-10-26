@@ -2,6 +2,16 @@
 {% load static %}
 {% block content %}
 
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <div class="section">
 	<!-- container -->
 	<div class="container">
@@ -32,19 +42,22 @@
 							<div class="products-slick" data-nav="#slick-nav-1">
 								<!-- product -->
 								{% for producto in productos %}
-									<div class="product">
-										<div class="product-img">
-											<img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" height="200px" width="100px">
+									<form action="{% url 'Ecommerce:agregarcarrito' producto.id %}" method="post">
+										{% csrf_token %}
+										<div class="product">
+											<div class="product-img">
+												<img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="150px" height="200px">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{ producto.categoria.nombre }}</p>
+												<h3 class="product-name"><a href="#">{{ producto.nombre }}</a></h3>
+												<h4 class="product-price">S/. {{ producto.precio }}</h4>
+											</div>
+											<div class="add-to-cart">
+												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+											</div>
 										</div>
-										<div class="product-body">
-											<p class="product-category">{{ producto.categoria.nombre }}</p>
-											<h3 class="product-name"><a href="#">{{ producto.nombre }}</a></h3>
-											<h4 class="product-price">S/. {{ producto.precio }}</h4>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
-										</div>
-									</div>
+									</form>
 								{% empty %}
 									<p>No hay productos disponibles en esta categoría.</p>
 								{% endfor %}

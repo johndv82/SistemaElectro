@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from ..models import Producto, Carrito, ItemCarrito
 from ..decorators import token_required
+from django.contrib import messages
 
 @token_required
 def ver_carrito(request):
@@ -23,10 +24,12 @@ def agregar_al_carrito(request, producto_id):
     if not item_created:
         item.cantidad += 1
     item.save()
-    return redirect('ver_carrito')
+    messages.success(request, 'Producto Agregado al Carrito')
+    return redirect('Ecommerce:productos')
 
 @token_required
 def eliminar_del_carrito(request, item_id):
     item = get_object_or_404(ItemCarrito, id=item_id, carrito__usuario=request.user)
     item.delete()
-    return redirect('ver_carrito')
+    messages.success(request, 'Producto Eliminado al Carrito')
+    return redirect('Ecommerce:carrito')
