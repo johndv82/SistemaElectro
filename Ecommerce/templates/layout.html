@@ -76,10 +76,10 @@
 							<div class="header-search">
 								<form>
 									<select class="input-select">
-										<option value="0">Categorias</option>
+										<option value="0">Categorías</option>
 										{% for categoria in categorias %}
-                                            <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
-                                        {% endfor %}
+											<option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+										{% endfor %}
 									</select>
 									<input class="input" placeholder="buscar aquí">
 									<button class="search-btn">Buscar</button>
@@ -172,13 +172,10 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categorias</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Celulares</a></li>
-						<li><a href="#">Camaras</a></li>
-						<li><a href="#">Accesorios</a></li>
+						<li class="active"><a href="{% url 'index' %}">Home</a></li>
+						{% for categoria in categorias %}
+							<li><a href="{% url 'index' %}?categoria_id={{ categoria.id }}">{{ categoria.nombre }}</a></li>
+						{% endfor %}
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -188,27 +185,9 @@
 		</nav>
 		<!-- /NAVIGATION -->
 
-		<!-- SECTION -->
-
-		<!-- /SECTION -->
-
-		<!-- SECTION -->
         <!-- Block Content -->
         {% block content %}{% endblock %}
         <!-- /Block Content -->
-		<!-- /SECTION -->
-
-		<!-- HOT DEAL SECTION -->
-
-		<!-- /HOT DEAL SECTION -->
-
-		<!-- SECTION -->
-
-		<!-- /SECTION -->
-
-		<!-- SECTION -->
-
-		<!-- /SECTION -->
 
 		<!-- NEWSLETTER -->
 		<div id="newsletter" class="section">
