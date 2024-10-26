@@ -132,8 +132,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -142,7 +142,12 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-    "USER_ID_FIELD": "username"
+    "USER_ID_FIELD": "username",
+    'SERIALIZERS': {
+        'user': 'EcommerceAPI.serializers.UserSerializer',
+        "current_user": "EcommerceAPI.serializers.UserSerializer",
+    },
 }
+
 
 ECOMMERCEAPI_URL = "http://localhost:8000"

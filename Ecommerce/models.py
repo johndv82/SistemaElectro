@@ -20,7 +20,7 @@ class Producto(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     slug = models.SlugField(max_length=200, unique=True)
-    imagen = models.ImageField(upload_to='productos/%Y/%m/%d/', blank=True, null=True)
+    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
     
