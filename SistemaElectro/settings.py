@@ -145,7 +145,4 @@ DJOSER = {
     "USER_ID_FIELD": "username"
 }
 
-<<<<<<< HEAD
 ECOMMERCEAPI_URL = "http://localhost:8000"
-=======
->>>>>>> 34ca56b24d4e2443f61885c32901dad7cedad705
