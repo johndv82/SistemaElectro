@@ -5,6 +5,7 @@ from ..decorators import token_required
 @token_required
 def listar_productos(request, categoria_id=0, busqueda=""):
     categorias = Categoria.objects.all()
+    usuario = request.user
     
     if categoria_id == 0:
         productos = Producto.objects.all()
@@ -19,6 +20,7 @@ def listar_productos(request, categoria_id=0, busqueda=""):
         'categorias': categorias,
         'productos': productos,
         'categoria_id': categoria_id,
-        'texto_input': busqueda
+        'texto_input': busqueda,
+        'usuario':usuario
     }
     return render(request, 'product.html', context)

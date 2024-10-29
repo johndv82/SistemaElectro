@@ -16,4 +16,6 @@ urlpatterns = [
     path('register/', usuario.register, name='register'),
     path('procesarpedido/', pedido.procesar_pedido, name='procesarpedido'),
     path('pedidos/', pedido.ver_pedidos, name='ver_pedidos'),
+    path('micuenta/', usuario.micuenta, name='micuenta'),
+    path('register/', usuario.register, name='register'),
 ]
